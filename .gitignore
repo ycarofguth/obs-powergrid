@@ -36,7 +36,7 @@ coverage/
 
 # Neutralino
 .tmp/
-resources/
+/resources/
 .neutralino.config.json.bak
 
 # Generated design system (conflicts with project theme)

@@ -93,7 +93,7 @@ export function CloudSettingsPage() {
       setAccessId('')
       setAccessSecret('')
       loadStatus()
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor')
     } finally {
       setLoading(false)
@@ -117,7 +117,7 @@ export function CloudSettingsPage() {
       } else {
         setError('Falha na conexão com Tuya Cloud')
       }
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor')
     } finally {
       setTesting(false)
@@ -146,7 +146,7 @@ export function CloudSettingsPage() {
       } else {
         setError(data.error?.message || 'Erro ao remover credenciais')
       }
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor')
     }
   }

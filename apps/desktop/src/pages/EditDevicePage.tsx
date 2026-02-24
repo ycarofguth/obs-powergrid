@@ -255,7 +255,11 @@ export function EditDevicePage() {
                       disabled={saving || refreshing}
                       className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Cloud size={14} weight="bold" className={refreshing ? 'animate-pulse' : ''} />
+                      <Cloud
+                        size={14}
+                        weight="bold"
+                        className={refreshing ? 'animate-pulse' : ''}
+                      />
                       {refreshing ? 'Atualizando...' : 'Atualizar via Cloud'}
                     </button>
                   </div>
@@ -271,7 +275,10 @@ export function EditDevicePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="ipAddress" className="block text-sm font-medium text-foreground mb-1">
+                  <label
+                    htmlFor="ipAddress"
+                    className="block text-sm font-medium text-foreground mb-1"
+                  >
                     Endereço IP
                   </label>
                   <input

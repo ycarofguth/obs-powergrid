@@ -33,9 +33,9 @@ const steps = [
     content: (
       <>
         <p className="mb-2">
-          Para se comunicar localmente com sua tomada, o app precisa da{' '}
-          <strong>Local Key</strong> — uma chave única de cada dispositivo. A única forma de obtê-la
-          é através da API de desenvolvedor da Tuya.
+          Para se comunicar localmente com sua tomada, o app precisa da <strong>Local Key</strong> —
+          uma chave única de cada dispositivo. A única forma de obtê-la é através da API de
+          desenvolvedor da Tuya.
         </p>
         <p className="mb-2">
           Para isso, você precisa criar uma <strong>conta de desenvolvedor gratuita</strong> no Tuya
@@ -54,8 +54,8 @@ const steps = [
     content: (
       <>
         <p className="mb-2">
-          Acesse <ExternalLink href="https://platform.tuya.com">platform.tuya.com</ExternalLink> e crie uma
-          conta gratuita (ou faça login se já tiver).
+          Acesse <ExternalLink href="https://platform.tuya.com">platform.tuya.com</ExternalLink> e
+          crie uma conta gratuita (ou faça login se já tiver).
         </p>
         <p className="text-muted-foreground">
           Use o mesmo e-mail da sua conta Tuya Smart (app do celular) para vincular os dispositivos

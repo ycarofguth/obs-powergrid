@@ -3,7 +3,7 @@
 ## Versoes Suportadas
 
 | Versao | Suporte |
-|--------|---------|
+| ------ | ------- |
 | 0.1.x  | Sim     |
 
 ## Reportando Vulnerabilidades

@@ -44,12 +44,12 @@ Todos os dados ficam no seu computador. Zero telemetria, zero rastreamento, codi
 
 ## Seguranca e Privacidade
 
-| Camada | Tecnologia | Protege |
-|--------|-----------|---------|
-| Banco de dados | SQLCipher (AES-256-CBC) | Todo o arquivo .db |
-| Campos sensiveis | AES-256-GCM | Local Key, Access ID, Access Secret |
-| Derivacao de chaves | Argon2id (64MB, 3 iter.) + HKDF | Senha → chaves separadas |
-| Comunicacao local | TCP/AES (TuyAPI) | Dados entre app e tomada |
+| Camada              | Tecnologia                      | Protege                             |
+| ------------------- | ------------------------------- | ----------------------------------- |
+| Banco de dados      | SQLCipher (AES-256-CBC)         | Todo o arquivo .db                  |
+| Campos sensiveis    | AES-256-GCM                     | Local Key, Access ID, Access Secret |
+| Derivacao de chaves | Argon2id (64MB, 3 iter.) + HKDF | Senha → chaves separadas            |
+| Comunicacao local   | TCP/AES (TuyAPI)                | Dados entre app e tomada            |
 
 - Sem backend remoto, sem analytics, sem crash reporting
 - Senha nunca armazenada — usada apenas para derivar chaves de criptografia
@@ -64,12 +64,12 @@ Leia a [Politica de Privacidade](docs/privacy-policy.md) completa.
 
 Baixe a versao mais recente na pagina de [Releases](https://github.com/ycaroguth/obs-tuya-smart-plug/releases/latest):
 
-| Plataforma | Instalador | Arquivo Portavel |
-|------------|-----------|-----------------|
-| Windows (x64) | `.exe` (instalador) | `.zip` |
-| macOS (Apple Silicon) | `.dmg` | `.tar.gz` |
-| macOS (Intel) | `.dmg` | `.tar.gz` |
-| Linux (x64) | — | `.tar.gz` |
+| Plataforma            | Instalador          | Arquivo Portavel |
+| --------------------- | ------------------- | ---------------- |
+| Windows (x64)         | `.exe` (instalador) | `.zip`           |
+| macOS (Apple Silicon) | `.dmg`              | `.tar.gz`        |
+| macOS (Intel)         | `.dmg`              | `.tar.gz`        |
+| Linux (x64)           | —                   | `.tar.gz`        |
 
 ---
 
@@ -124,15 +124,15 @@ pnpm dev:neu
 
 ### Comandos
 
-| Comando | Descricao |
-|---------|-----------|
-| `pnpm dev` | Frontend + sidecar em paralelo |
-| `pnpm dev:neu` | Modo desktop com Neutralino |
-| `pnpm build` | Build completo (sidecar + desktop) |
-| `pnpm test` | Executar testes |
-| `pnpm format` | Formatar codigo |
-| `pnpm lint` | Verificar lint |
-| `pnpm dist` | Build de distribuicao |
+| Comando        | Descricao                          |
+| -------------- | ---------------------------------- |
+| `pnpm dev`     | Frontend + sidecar em paralelo     |
+| `pnpm dev:neu` | Modo desktop com Neutralino        |
+| `pnpm build`   | Build completo (sidecar + desktop) |
+| `pnpm test`    | Executar testes                    |
+| `pnpm format`  | Formatar codigo                    |
+| `pnpm lint`    | Verificar lint                     |
+| `pnpm dist`    | Build de distribuicao              |
 
 ### Build para Distribuicao
 
@@ -193,43 +193,43 @@ O script detecta a plataforma automaticamente e gera o pacote em `dist/`.
 
 ## Stack
 
-| Camada | Tecnologia | Versao |
-|--------|-----------|--------|
-| Desktop | Neutralino.js | 6.5.0 |
-| Frontend | React + TypeScript + Vite | 19.x / 5.7.x / 6.x |
-| UI | Radix UI + Tailwind CSS | 4.x |
-| Graficos | Recharts | 3.x |
-| Backend | Node.js + Express | 22.x / 5.x |
-| Banco | better-sqlite3 + SQLCipher | 12.x |
-| ORM | Drizzle ORM | 0.45.x |
-| Crypto | argon2 + Node.js crypto | 0.44.x |
-| Tuya Local | TuyAPI | 7.5.x |
-| Tuya Cloud | @tuya/tuya-connector-nodejs | 2.x |
-| Testes | Vitest | 4.x |
+| Camada     | Tecnologia                  | Versao             |
+| ---------- | --------------------------- | ------------------ |
+| Desktop    | Neutralino.js               | 6.5.0              |
+| Frontend   | React + TypeScript + Vite   | 19.x / 5.7.x / 6.x |
+| UI         | Radix UI + Tailwind CSS     | 4.x                |
+| Graficos   | Recharts                    | 3.x                |
+| Backend    | Node.js + Express           | 22.x / 5.x         |
+| Banco      | better-sqlite3 + SQLCipher  | 12.x               |
+| ORM        | Drizzle ORM                 | 0.45.x             |
+| Crypto     | argon2 + Node.js crypto     | 0.44.x             |
+| Tuya Local | TuyAPI                      | 7.5.x              |
+| Tuya Cloud | @tuya/tuya-connector-nodejs | 2.x                |
+| Testes     | Vitest                      | 4.x                |
 
 ---
 
 ## Portas
 
-| Porta | Servico |
-|-------|---------|
-| 47531 | Sidecar Express |
-| 47532 | Neutralino |
+| Porta | Servico               |
+| ----- | --------------------- |
+| 47531 | Sidecar Express       |
+| 47532 | Neutralino            |
 | 47533 | Vite dev server (dev) |
 
 ---
 
 ## Documentacao
 
-| Documento | Descricao |
-|-----------|-----------|
-| [Decisoes de Arquitetura](docs/architecture.md) | 16 ADRs documentados |
-| [Requisitos Funcionais](docs/requirements/functional-requirements.md) | 42 requisitos |
-| [Requisitos Nao-Funcionais](docs/requirements/non-functional-requirements.md) | 16 requisitos |
-| [Milestones](docs/milestones.md) | M1-M7 com escopo e status |
-| [Design System](docs/design/design-system.md) | Cores, tokens, componentes |
-| [Politica de Privacidade](docs/privacy-policy.md) | Zero telemetria |
-| [Guia de Configuracao](docs/setup-guide.md) | Setup inicial |
+| Documento                                                                     | Descricao                  |
+| ----------------------------------------------------------------------------- | -------------------------- |
+| [Decisoes de Arquitetura](docs/architecture.md)                               | 16 ADRs documentados       |
+| [Requisitos Funcionais](docs/requirements/functional-requirements.md)         | 42 requisitos              |
+| [Requisitos Nao-Funcionais](docs/requirements/non-functional-requirements.md) | 16 requisitos              |
+| [Milestones](docs/milestones.md)                                              | M1-M7 com escopo e status  |
+| [Design System](docs/design/design-system.md)                                 | Cores, tokens, componentes |
+| [Politica de Privacidade](docs/privacy-policy.md)                             | Zero telemetria            |
+| [Guia de Configuracao](docs/setup-guide.md)                                   | Setup inicial              |
 
 ---
 

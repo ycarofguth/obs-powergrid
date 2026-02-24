@@ -76,7 +76,10 @@ function CustomTooltip({
   )
 }
 
-export const PowerAreaChart = memo(function PowerAreaChart({ data, avgPower }: PowerAreaChartProps) {
+export const PowerAreaChart = memo(function PowerAreaChart({
+  data,
+  avgPower,
+}: PowerAreaChartProps) {
   const [overlays, setOverlays] = useState<Overlay[]>([])
 
   if (!data.length) {
@@ -99,7 +102,8 @@ export const PowerAreaChart = memo(function PowerAreaChart({ data, avgPower }: P
   }))
 
   const maxPower = Math.max(...data.map((d) => d.avgPower))
-  const nice = maxPower <= 10 ? 2 : maxPower <= 50 ? 10 : maxPower <= 200 ? 20 : maxPower <= 500 ? 50 : 100
+  const nice =
+    maxPower <= 10 ? 2 : maxPower <= 50 ? 10 : maxPower <= 200 ? 20 : maxPower <= 500 ? 50 : 100
   const yAxisMax = Math.ceil((maxPower * 1.1) / nice) * nice || 10
 
   return (

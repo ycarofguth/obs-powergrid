@@ -183,9 +183,7 @@ export const ComparisonCostChart = memo(function ComparisonCostChart({
             axisLine={{ stroke: 'hsl(var(--border))' }}
             tickFormatter={(value: number) => value.toFixed(2)}
           />
-          <Tooltip
-            content={<CustomTooltip deviceNameMap={deviceNameMap} currency={currency} />}
-          />
+          <Tooltip content={<CustomTooltip deviceNameMap={deviceNameMap} currency={currency} />} />
           <Legend
             formatter={(value: string) => deviceNameMap[value] || value}
             wrapperStyle={{ fontSize: 12 }}

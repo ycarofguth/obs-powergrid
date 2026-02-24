@@ -12,13 +12,7 @@
     "enabled": true,
     "writeToLogFile": false
   },
-  "nativeAllowList": [
-    "app.*",
-    "os.*",
-    "storage.*",
-    "filesystem.*",
-    "debug.*"
-  ],
+  "nativeAllowList": ["app.*", "os.*", "storage.*", "filesystem.*", "debug.*"],
   "modes": {
     "window": {
       "title": "OBS PowerGrid",

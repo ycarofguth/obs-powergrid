@@ -42,7 +42,9 @@ export function createDevice(input: DeviceInput): DeviceOutput {
   const now = new Date()
 
   // Criptografa o localKey (pode ser vazio no modo cloud)
-  const encryptedLocalKey = input.localKey ? encryptField(input.localKey, fieldsKey) : Buffer.alloc(0)
+  const encryptedLocalKey = input.localKey
+    ? encryptField(input.localKey, fieldsKey)
+    : Buffer.alloc(0)
 
   const device = {
     id,
@@ -75,7 +77,8 @@ function rowToOutput(device: typeof schema.devices.$inferSelect, fieldsKey: Buff
     id: device.id,
     name: device.name,
     deviceId: device.deviceId,
-    localKey: device.localKey && device.localKey.length > 0 ? decryptField(device.localKey, fieldsKey) : '',
+    localKey:
+      device.localKey && device.localKey.length > 0 ? decryptField(device.localKey, fieldsKey) : '',
     ipAddress: device.ipAddress,
     protocolVersion: device.protocolVersion ?? '3.4',
     communicationMode: (device.communicationMode ?? 'local') as 'local' | 'cloud',

@@ -153,7 +153,10 @@ export function AddDevicePage() {
             {communicationMode === 'local' && (
               <>
                 <div>
-                  <label htmlFor="localKey" className="block text-sm font-medium text-foreground mb-1">
+                  <label
+                    htmlFor="localKey"
+                    className="block text-sm font-medium text-foreground mb-1"
+                  >
                     Local Key *
                   </label>
                   <input
@@ -171,7 +174,10 @@ export function AddDevicePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="ipAddress" className="block text-sm font-medium text-foreground mb-1">
+                  <label
+                    htmlFor="ipAddress"
+                    className="block text-sm font-medium text-foreground mb-1"
+                  >
                     Endereço IP
                   </label>
                   <input
@@ -184,7 +190,8 @@ export function AddDevicePage() {
                     className="font-mono disabled:opacity-50"
                   />
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Recomendado. Sem o IP, o app tenta descobrir via broadcast UDP, o que pode falhar dependendo da rede
+                    Recomendado. Sem o IP, o app tenta descobrir via broadcast UDP, o que pode
+                    falhar dependendo da rede
                   </p>
                 </div>
 

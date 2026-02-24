@@ -437,11 +437,7 @@ export function SetupPage() {
         />
         <span className="text-sm text-muted-foreground">
           Li e aceito a{' '}
-          <a
-            href="#"
-            onClick={handleOpenPrivacyPolicy}
-            className="text-primary hover:underline"
-          >
+          <a href="#" onClick={handleOpenPrivacyPolicy} className="text-primary hover:underline">
             Política de Privacidade
           </a>
         </span>
@@ -649,163 +645,163 @@ export function SetupPage() {
 
       {cloudConfigured && (
         <>
-      {devicesError && (
-        <div className="mb-4 flex items-center gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-destructive text-sm">
-          <WarningCircle size={16} weight="bold" />
-          {devicesError}
-        </div>
-      )}
-
-      {importedCount > 0 && (
-        <div className="mb-4 flex items-center gap-2 rounded-md bg-success/15 p-3 text-success text-sm">
-          <CheckCircle size={16} weight="duotone" />
-          {importedCount} dispositivo(s) importado(s) com sucesso!
-        </div>
-      )}
-
-      {/* Filter */}
-      <div className="mb-4 flex items-center justify-between">
-        <label className="flex items-center gap-2 text-sm">
-          <Funnel size={16} weight="bold" className="text-muted-foreground" />
-          <input
-            type="checkbox"
-            checked={showOnlyPlugs}
-            onChange={(e) => setShowOnlyPlugs(e.target.checked)}
-            className="rounded"
-          />
-          Apenas dispositivos de energia
-        </label>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">
-            {selectedDevices.size} selecionado(s)
-          </span>
-          <button
-            onClick={fetchCloudDevices}
-            disabled={devicesLoading}
-            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md disabled:opacity-50"
-            title="Atualizar lista"
-          >
-            <ArrowsClockwise
-              size={16}
-              weight="bold"
-              className={devicesLoading ? 'animate-spin' : ''}
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* Device List */}
-      {devicesLoading && cloudDevices.length === 0 ? (
-        <div className="text-center py-12">
-          <ArrowsClockwise
-            size={32}
-            weight="bold"
-            className="mx-auto text-muted-foreground animate-spin"
-          />
-          <p className="mt-2 text-sm text-muted-foreground">Buscando dispositivos...</p>
-        </div>
-      ) : filteredDevices.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-sm text-muted-foreground">
-            {cloudDevices.length === 0
-              ? 'Nenhum dispositivo encontrado na sua conta Tuya'
-              : 'Nenhuma tomada encontrada. Desmarque o filtro para ver todos.'}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {/* Select All */}
-          <button
-            onClick={() => {
-              if (selectedDevices.size === filteredDevices.length) {
-                setSelectedDevices(new Set())
-              } else {
-                setSelectedDevices(new Set(filteredDevices.map((d) => d.id)))
-              }
-            }}
-            className="flex items-center gap-2 text-sm text-primary hover:underline mb-2"
-          >
-            {selectedDevices.size === filteredDevices.length ? (
-              <>
-                <Check size={16} weight="bold" /> Desmarcar todos
-              </>
-            ) : (
-              <>
-                <Circle size={16} /> Selecionar todos
-              </>
-            )}
-          </button>
-
-          {filteredDevices.map((device) => (
-            <div
-              key={device.id}
-              onClick={() => !importing && importedCount === 0 && toggleDevice(device.id)}
-              className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
-                importing || importedCount > 0 ? 'opacity-60' : 'cursor-pointer'
-              } ${
-                selectedDevices.has(device.id)
-                  ? 'border-primary bg-primary/5'
-                  : 'hover:bg-secondary/50'
-              }`}
-            >
-              <div
-                className={`flex items-center justify-center w-5 h-5 rounded border ${
-                  selectedDevices.has(device.id)
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-muted-foreground'
-                }`}
-              >
-                {selectedDevices.has(device.id) && <Check size={12} weight="bold" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm">{device.name}</span>
-                  <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">
-                    {CATEGORY_LABELS[device.category] || 'Outro'}
-                  </span>
-                  {device.isOnline ? (
-                    <span className="flex items-center gap-1 text-xs text-success">
-                      <WifiHigh size={12} weight="bold" /> Online
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <WifiSlash size={12} /> Offline
-                    </span>
-                  )}
-                </div>
-                <div className="flex gap-3 mt-0.5 text-xs text-muted-foreground">
-                  <span>ID: {device.id.substring(0, 12)}...</span>
-                  <span>Protocolo: {device.protocolVersion}</span>
-                  {device.ip && <span>IP: {device.ip}</span>}
-                </div>
-              </div>
+          {devicesError && (
+            <div className="mb-4 flex items-center gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-destructive text-sm">
+              <WarningCircle size={16} weight="bold" />
+              {devicesError}
             </div>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Import button */}
-      {filteredDevices.length > 0 && importedCount === 0 && (
-        <div className="mt-6 text-center">
-          <button
-            onClick={handleImportDevices}
-            disabled={selectedDevices.size === 0 || importing}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
-          >
-            {importing ? (
-              <>
-                <ArrowsClockwise size={16} weight="bold" className="animate-spin" />
-                Importando...
-              </>
-            ) : (
-              <>
-                <Check size={16} weight="bold" />
-                Importar {selectedDevices.size} dispositivo(s)
-              </>
-            )}
-          </button>
-        </div>
-      )}
+          {importedCount > 0 && (
+            <div className="mb-4 flex items-center gap-2 rounded-md bg-success/15 p-3 text-success text-sm">
+              <CheckCircle size={16} weight="duotone" />
+              {importedCount} dispositivo(s) importado(s) com sucesso!
+            </div>
+          )}
+
+          {/* Filter */}
+          <div className="mb-4 flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm">
+              <Funnel size={16} weight="bold" className="text-muted-foreground" />
+              <input
+                type="checkbox"
+                checked={showOnlyPlugs}
+                onChange={(e) => setShowOnlyPlugs(e.target.checked)}
+                className="rounded"
+              />
+              Apenas dispositivos de energia
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">
+                {selectedDevices.size} selecionado(s)
+              </span>
+              <button
+                onClick={fetchCloudDevices}
+                disabled={devicesLoading}
+                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md disabled:opacity-50"
+                title="Atualizar lista"
+              >
+                <ArrowsClockwise
+                  size={16}
+                  weight="bold"
+                  className={devicesLoading ? 'animate-spin' : ''}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Device List */}
+          {devicesLoading && cloudDevices.length === 0 ? (
+            <div className="text-center py-12">
+              <ArrowsClockwise
+                size={32}
+                weight="bold"
+                className="mx-auto text-muted-foreground animate-spin"
+              />
+              <p className="mt-2 text-sm text-muted-foreground">Buscando dispositivos...</p>
+            </div>
+          ) : filteredDevices.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-sm text-muted-foreground">
+                {cloudDevices.length === 0
+                  ? 'Nenhum dispositivo encontrado na sua conta Tuya'
+                  : 'Nenhuma tomada encontrada. Desmarque o filtro para ver todos.'}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {/* Select All */}
+              <button
+                onClick={() => {
+                  if (selectedDevices.size === filteredDevices.length) {
+                    setSelectedDevices(new Set())
+                  } else {
+                    setSelectedDevices(new Set(filteredDevices.map((d) => d.id)))
+                  }
+                }}
+                className="flex items-center gap-2 text-sm text-primary hover:underline mb-2"
+              >
+                {selectedDevices.size === filteredDevices.length ? (
+                  <>
+                    <Check size={16} weight="bold" /> Desmarcar todos
+                  </>
+                ) : (
+                  <>
+                    <Circle size={16} /> Selecionar todos
+                  </>
+                )}
+              </button>
+
+              {filteredDevices.map((device) => (
+                <div
+                  key={device.id}
+                  onClick={() => !importing && importedCount === 0 && toggleDevice(device.id)}
+                  className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
+                    importing || importedCount > 0 ? 'opacity-60' : 'cursor-pointer'
+                  } ${
+                    selectedDevices.has(device.id)
+                      ? 'border-primary bg-primary/5'
+                      : 'hover:bg-secondary/50'
+                  }`}
+                >
+                  <div
+                    className={`flex items-center justify-center w-5 h-5 rounded border ${
+                      selectedDevices.has(device.id)
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-muted-foreground'
+                    }`}
+                  >
+                    {selectedDevices.has(device.id) && <Check size={12} weight="bold" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">{device.name}</span>
+                      <span className="rounded bg-secondary px-1.5 py-0.5 text-xs">
+                        {CATEGORY_LABELS[device.category] || 'Outro'}
+                      </span>
+                      {device.isOnline ? (
+                        <span className="flex items-center gap-1 text-xs text-success">
+                          <WifiHigh size={12} weight="bold" /> Online
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <WifiSlash size={12} /> Offline
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-3 mt-0.5 text-xs text-muted-foreground">
+                      <span>ID: {device.id.substring(0, 12)}...</span>
+                      <span>Protocolo: {device.protocolVersion}</span>
+                      {device.ip && <span>IP: {device.ip}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Import button */}
+          {filteredDevices.length > 0 && importedCount === 0 && (
+            <div className="mt-6 text-center">
+              <button
+                onClick={handleImportDevices}
+                disabled={selectedDevices.size === 0 || importing}
+                className="inline-flex items-center gap-2 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
+              >
+                {importing ? (
+                  <>
+                    <ArrowsClockwise size={16} weight="bold" className="animate-spin" />
+                    Importando...
+                  </>
+                ) : (
+                  <>
+                    <Check size={16} weight="bold" />
+                    Importar {selectedDevices.size} dispositivo(s)
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
@@ -817,9 +813,7 @@ export function SetupPage() {
         <CheckCircle size={40} weight="duotone" className="text-success" />
       </div>
       <h2 className="text-2xl font-bold text-foreground mb-2">Tudo Pronto!</h2>
-      <p className="text-muted-foreground mb-6">
-        Seu app está configurado e pronto para uso.
-      </p>
+      <p className="text-muted-foreground mb-6">Seu app está configurado e pronto para uso.</p>
 
       <div className="bg-card border border-border rounded-lg p-6 text-left space-y-3 mb-6">
         <div className="flex items-center gap-3">

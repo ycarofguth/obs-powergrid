@@ -39,7 +39,7 @@ export function ImportDevicesPage() {
           fetchDevices()
         }
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao verificar configuração')
     }
   }
@@ -58,7 +58,7 @@ export function ImportDevicesPage() {
       }
 
       setDevices(data.data || [])
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor')
     } finally {
       setLoading(false)

@@ -1,7 +1,7 @@
 name: Feature Request
 description: Sugerir uma funcionalidade para o OBS PowerGrid
-title: "[Feature]: "
-labels: ["enhancement"]
+title: '[Feature]: '
+labels: ['enhancement']
 body:
   - type: textarea
     id: problem

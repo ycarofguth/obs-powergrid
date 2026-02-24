@@ -1,7 +1,7 @@
 name: Bug Report
 description: Reportar um bug no OBS PowerGrid
-title: "[Bug]: "
-labels: ["bug"]
+title: '[Bug]: '
+labels: ['bug']
 body:
   - type: markdown
     attributes:
@@ -49,7 +49,7 @@ body:
     id: version
     attributes:
       label: Versao do App
-      placeholder: "v0.1.0"
+      placeholder: 'v0.1.0'
     validations:
       required: true
   - type: dropdown

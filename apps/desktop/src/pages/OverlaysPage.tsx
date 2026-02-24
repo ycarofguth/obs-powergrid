@@ -215,8 +215,8 @@ export function OverlaysPage() {
         <div className="mt-8 p-4 rounded-lg bg-secondary/50">
           <p className="text-sm text-muted-foreground">
             Copie a URL e adicione como fonte{' '}
-            <span className="font-medium text-foreground">Navegador</span> (Browser) no OBS.
-            Clique na engrenagem para customizar e ver as dimensões recomendadas.
+            <span className="font-medium text-foreground">Navegador</span> (Browser) no OBS. Clique
+            na engrenagem para customizar e ver as dimensões recomendadas.
           </p>
         </div>
       </div>

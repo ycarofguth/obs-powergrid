@@ -69,7 +69,6 @@ async function initApp() {
       </BrowserRouter>
     </StrictMode>
   )
-
 }
 
 initApp()

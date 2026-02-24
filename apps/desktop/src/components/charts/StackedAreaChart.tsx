@@ -122,7 +122,8 @@ export const StackedAreaChart = memo(function StackedAreaChart({ data }: Stacked
 
   const allPowerValues = data.flatMap((d) => d.readings.map((r) => r.avgPower))
   const maxPower = Math.max(...allPowerValues, 0)
-  const nice = maxPower <= 10 ? 2 : maxPower <= 50 ? 10 : maxPower <= 200 ? 20 : maxPower <= 500 ? 50 : 100
+  const nice =
+    maxPower <= 10 ? 2 : maxPower <= 50 ? 10 : maxPower <= 200 ? 20 : maxPower <= 500 ? 50 : 100
   const yAxisMax = Math.ceil((maxPower * 1.2) / nice) * nice || 10
 
   return (

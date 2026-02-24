@@ -48,16 +48,16 @@ docs/            # Documentacao
 
 ## Comandos Uteis
 
-| Comando | Descricao |
-|---------|-----------|
-| `pnpm dev` | Frontend + sidecar em paralelo |
-| `pnpm dev:neu` | Modo desktop com Neutralino |
-| `pnpm build` | Build completo |
-| `pnpm test` | Executar testes |
-| `pnpm test:watch` | Testes em modo watch |
-| `pnpm format` | Formatar codigo (Prettier) |
-| `pnpm format:check` | Verificar formatacao |
-| `pnpm lint` | Verificar lint (ESLint) |
+| Comando             | Descricao                      |
+| ------------------- | ------------------------------ |
+| `pnpm dev`          | Frontend + sidecar em paralelo |
+| `pnpm dev:neu`      | Modo desktop com Neutralino    |
+| `pnpm build`        | Build completo                 |
+| `pnpm test`         | Executar testes                |
+| `pnpm test:watch`   | Testes em modo watch           |
+| `pnpm format`       | Formatar codigo (Prettier)     |
+| `pnpm format:check` | Verificar formatacao           |
+| `pnpm lint`         | Verificar lint (ESLint)        |
 
 ---
 

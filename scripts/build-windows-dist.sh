@@ -5,8 +5,17 @@ set -e
 # Run after: pnpm build && pnpm --filter @obs-tuya/sidecar bundle
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Convert paths for Node.js on Windows (Git Bash returns /d/... but Node needs D:/...)
+if command -v cygpath &>/dev/null; then
+  NODE_DIR=$(cygpath -m "$ROOT_DIR")
+else
+  NODE_DIR="$ROOT_DIR"
+fi
+
 DIST_DIR="$ROOT_DIR/dist/obs-tuya-smart-plug"
-VERSION=$(node -e "console.log(require('$ROOT_DIR/package.json').version)")
+NODE_DIST_DIR="$NODE_DIR/dist/obs-tuya-smart-plug"
+VERSION=$(node -e "console.log(require('$NODE_DIR/package.json').version)")
 
 echo "=== Assembling Windows distribution v${VERSION} ==="
 
@@ -19,11 +28,11 @@ cp "$ROOT_DIR/bin/neutralino-win_x64.exe" "$DIST_DIR/obs-tuya-smart-plug.exe"
 # Config
 node -e "
   const fs = require('fs');
-  const config = JSON.parse(fs.readFileSync('$ROOT_DIR/neutralino.config.json', 'utf8'));
+  const config = JSON.parse(fs.readFileSync('$NODE_DIR/neutralino.config.json', 'utf8'));
   delete config.url;
   config.documentRoot = '/apps/desktop/dist/';
   config.modes.window.enableInspector = false;
-  fs.writeFileSync('$DIST_DIR/neutralino.config.json', JSON.stringify(config, null, 2));
+  fs.writeFileSync('$NODE_DIST_DIR/neutralino.config.json', JSON.stringify(config, null, 2));
 "
 
 # Frontend

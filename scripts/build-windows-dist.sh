@@ -96,6 +96,9 @@ fi
 # Resources
 mkdir -p "$DIST_DIR/resources"
 
+# Generate icon.ico
+node "$ROOT_DIR/scripts/generate-ico.mjs" "$DIST_DIR/icon.ico"
+
 # Launcher script (VBScript - no console window)
 cat > "$DIST_DIR/start.vbs" << 'VBSEOF'
 Set WshShell = CreateObject("WScript.Shell")
@@ -106,8 +109,26 @@ WshShell.CurrentDirectory = appDir
 ' Start sidecar (hidden window)
 WshShell.Run """" & appDir & "\runtime\node.exe"" """ & appDir & "\apps\sidecar\dist\bundle.mjs""", 0, False
 
-' Wait for sidecar to start
-WScript.Sleep 3000
+' Wait for sidecar to be ready (health check)
+Dim http, ready, attempts
+Set http = CreateObject("MSXML2.XMLHTTP")
+ready = False
+attempts = 0
+Do While Not ready And attempts < 30
+    On Error Resume Next
+    http.Open "GET", "http://localhost:47531/api/health", False
+    http.Send
+    If Err.Number = 0 Then
+        If http.Status = 200 Then
+            ready = True
+        End If
+    End If
+    On Error GoTo 0
+    If Not ready Then
+        WScript.Sleep 500
+        attempts = attempts + 1
+    End If
+Loop
 
 ' Start Neutralino (GUI window)
 WshShell.Run """" & appDir & "\obs-tuya-smart-plug.exe"" --load-dir-res", 1, True

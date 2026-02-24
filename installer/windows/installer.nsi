@@ -61,8 +61,9 @@ Section "Install"
   ; Resources
   SetOutPath "$INSTDIR\resources"
 
-  ; Launcher script (created by build-windows-dist.sh)
+  ; Icon and launcher script (created by build-windows-dist.sh)
   SetOutPath "$INSTDIR"
+  File "..\..\dist\obs-tuya-smart-plug\icon.ico"
   File "..\..\dist\obs-tuya-smart-plug\start.vbs"
 
   ; Create uninstaller
@@ -70,11 +71,11 @@ Section "Install"
 
   ; Start Menu shortcuts
   CreateDirectory "$SMPROGRAMS\OBS PowerGrid"
-  CreateShortcut "$SMPROGRAMS\OBS PowerGrid\OBS PowerGrid.lnk" "wscript.exe" '"$INSTDIR\start.vbs"' "$INSTDIR\obs-tuya-smart-plug.exe" 0
+  CreateShortcut "$SMPROGRAMS\OBS PowerGrid\OBS PowerGrid.lnk" "wscript.exe" '"$INSTDIR\start.vbs"' "$INSTDIR\icon.ico" 0
   CreateShortcut "$SMPROGRAMS\OBS PowerGrid\Desinstalar.lnk" "$INSTDIR\uninstall.exe"
 
   ; Desktop shortcut
-  CreateShortcut "$DESKTOP\OBS PowerGrid.lnk" "wscript.exe" '"$INSTDIR\start.vbs"' "$INSTDIR\obs-tuya-smart-plug.exe" 0
+  CreateShortcut "$DESKTOP\OBS PowerGrid.lnk" "wscript.exe" '"$INSTDIR\start.vbs"' "$INSTDIR\icon.ico" 0
 
   ; Registry - Add/Remove Programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OBS PowerGrid" \
@@ -86,7 +87,7 @@ Section "Install"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OBS PowerGrid" \
     "Publisher" "ycaroguth"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OBS PowerGrid" \
-    "DisplayIcon" "$INSTDIR\obs-tuya-smart-plug.exe"
+    "DisplayIcon" "$INSTDIR\icon.ico"
   WriteRegStr HKLM "Software\OBS PowerGrid" "InstallDir" "$INSTDIR"
 SectionEnd
 
@@ -98,6 +99,7 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\resources"
   Delete "$INSTDIR\obs-tuya-smart-plug.exe"
   Delete "$INSTDIR\neutralino.config.json"
+  Delete "$INSTDIR\icon.ico"
   Delete "$INSTDIR\start.vbs"
   Delete "$INSTDIR\uninstall.exe"
   RMDir "$INSTDIR"

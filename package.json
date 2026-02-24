@@ -1,0 +1,46 @@
+{
+  "name": "obs-powergrid",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OBS PowerGrid - Energy overlay for Tuya smart plug monitoring",
+  "pnpm": {
+    "overrides": {
+      "better-sqlite3": "npm:better-sqlite3-multiple-ciphers@^12.6.2"
+    },
+    "onlyBuiltDependencies": [
+      "argon2",
+      "better-sqlite3",
+      "better-sqlite3-multiple-ciphers",
+      "esbuild"
+    ]
+  },
+  "scripts": {
+    "dev": "pnpm run --parallel dev:*",
+    "dev:desktop": "pnpm --filter @obs-tuya/desktop dev",
+    "dev:sidecar": "pnpm --filter @obs-tuya/sidecar dev",
+    "build": "pnpm run build:sidecar && pnpm run build:desktop",
+    "build:desktop": "pnpm --filter @obs-tuya/desktop build",
+    "build:sidecar": "pnpm --filter @obs-tuya/sidecar build",
+    "lint": "pnpm run --parallel lint",
+    "clean": "pnpm run --parallel clean",
+    "dev:neu": "tsx scripts/dev-neu.ts",
+    "get-device-info": "tsx scripts/get-device-info.ts",
+    "dist": "bash scripts/build-dist.sh",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@neutralinojs/neu": "^11.7.0",
+    "prettier": "^3.8.1",
+    "tsx": "^4.19.0",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "license": "GPL-3.0-or-later"
+}

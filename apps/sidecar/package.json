@@ -1,0 +1,41 @@
+{
+  "name": "@obs-tuya/sidecar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OBS PowerGrid - Backend sidecar",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "bundle": "node esbuild.config.mjs",
+    "start": "node dist/index.js",
+    "lint": "eslint .",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@obs-tuya/shared": "workspace:*",
+    "@tuya/tuya-connector-nodejs": "^2.1.2",
+    "argon2": "^0.44.0",
+    "better-sqlite3": "npm:better-sqlite3-multiple-ciphers@^12.6.2",
+    "better-sqlite3-multiple-ciphers": "^12.6.2",
+    "cors": "^2.8.0",
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.0.0",
+    "tuyapi": "^7.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.31.8",
+    "esbuild": "^0.27.3",
+    "eslint": "^9.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^4.0.18"
+  }
+}

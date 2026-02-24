@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+apps/sidecar/dist/
+apps/desktop/dist/
+build/
+out/
+dist/
+.neutralino/
+
+# Node.js portable runtime (downloaded for installers)
+runtime/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test
+coverage/
+
+# Neutralino
+.tmp/
+resources/
+.neutralino.config.json.bak
+
+# Generated design system (conflicts with project theme)
+design-system/
+
+# Credentials (NEVER commit)
+config.json
+credentials.json
+*.key
+secrets/
+
+# Neutralino binaries
+bin/
+
+# Temporary files
+temp/
+temp.md
+
+# Claude Code
+.claude/
+CLAUDE.md
+.agents/

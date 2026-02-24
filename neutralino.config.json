@@ -1,0 +1,48 @@
+{
+  "applicationId": "com.obstuya.smartplug",
+  "version": "0.1.0",
+  "defaultMode": "window",
+  "port": 47532,
+  "documentRoot": "/apps/desktop/dist/",
+  "url": "http://localhost:47533",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": false
+  },
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+    "storage.*",
+    "filesystem.*",
+    "debug.*"
+  ],
+  "modes": {
+    "window": {
+      "title": "OBS PowerGrid",
+      "width": 1152,
+      "height": 700,
+      "minWidth": 640,
+      "minHeight": 360,
+      "center": true,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/apps/desktop/dist/icon.png",
+      "enableInspector": true,
+      "borderless": false,
+      "maximize": false,
+      "resizable": true,
+      "useSavedState": false
+    }
+  },
+  "cli": {
+    "binaryName": "obs-tuya-smart-plug",
+    "resourcesPath": "/resources/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/apps/desktop/dist/neutralino.js",
+    "binaryVersion": "6.5.0",
+    "clientVersion": "6.5.0"
+  }
+}

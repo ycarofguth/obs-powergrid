@@ -1,0 +1,73 @@
+name: Bug Report
+description: Reportar um bug no OBS PowerGrid
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar este bug! Preencha o formulario abaixo para nos ajudar a resolver o problema.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descricao do Bug
+      description: O que aconteceu?
+      placeholder: Descreva o comportamento inesperado...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento Esperado
+      description: O que voce esperava que acontecesse?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para Reproduzir
+      description: Como reproduzir o problema?
+      placeholder: |
+        1. Va para '...'
+        2. Clique em '...'
+        3. Veja o erro
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema Operacional
+      options:
+        - Windows 10/11
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux (Ubuntu/Debian)
+        - Linux (Outro)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versao do App
+      placeholder: "v0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: connection-mode
+    attributes:
+      label: Modo de Conexao
+      options:
+        - Local (TCP/AES)
+        - Cloud (REST API)
+        - Nao se aplica
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs Relevantes
+      description: Cole logs do app (pagina Logs > Export CSV)
+      render: shell
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Se aplicavel, adicione screenshots.

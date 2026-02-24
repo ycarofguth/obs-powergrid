@@ -1,0 +1,304 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  NODE_RUNTIME_VERSION: '22.13.1'
+
+jobs:
+  # ==================== macOS ====================
+  build-macos:
+    strategy:
+      matrix:
+        include:
+          - runner: macos-latest
+            arch: arm64
+            binary: neutralino-mac_arm64
+            node_platform: darwin-arm64
+          - runner: macos-13
+            arch: x64
+            binary: neutralino-mac_x64
+            node_platform: darwin-x64
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Bundle sidecar
+        run: pnpm --filter @obs-tuya/sidecar bundle
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Download portable Node.js
+        run: |
+          NODE_URL="https://nodejs.org/dist/v${NODE_RUNTIME_VERSION}/node-v${NODE_RUNTIME_VERSION}-${{ matrix.node_platform }}.tar.gz"
+          curl -fsSL "$NODE_URL" | tar xz -C /tmp/
+          mkdir -p runtime
+          cp "/tmp/node-v${NODE_RUNTIME_VERSION}-${{ matrix.node_platform }}/bin/node" runtime/node
+          strip runtime/node 2>/dev/null || true
+          chmod +x runtime/node
+
+      - name: Build .app bundle
+        run: bash scripts/build-macos-app.sh ${{ matrix.arch }}
+
+      - name: Install create-dmg
+        run: brew install create-dmg || true
+
+      - name: Create DMG
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          DMG_NAME="OBS-PowerGrid-${VERSION}-macos-${{ matrix.arch }}.dmg"
+          create-dmg \
+            --volname "OBS PowerGrid" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "OBS PowerGrid.app" 150 190 \
+            --app-drop-link 450 190 \
+            --no-internet-enable \
+            "dist/$DMG_NAME" \
+            "dist/OBS PowerGrid.app" || true
+
+      - name: Create tar.gz
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          cd dist
+          tar -czf "obs-tuya-smart-plug-${VERSION}-macos-${{ matrix.arch }}.tar.gz" "OBS PowerGrid.app"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}
+          path: |
+            dist/*.dmg
+            dist/*.tar.gz
+
+  # ==================== Windows ====================
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Bundle sidecar
+        run: pnpm --filter @obs-tuya/sidecar bundle
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Download portable Node.js
+        shell: bash
+        run: |
+          NODE_URL="https://nodejs.org/dist/v${NODE_RUNTIME_VERSION}/node-v${NODE_RUNTIME_VERSION}-win-x64.zip"
+          curl -fsSL -o /tmp/node-runtime.zip "$NODE_URL"
+          mkdir -p /tmp/node-extract runtime
+          7z x /tmp/node-runtime.zip -o/tmp/node-extract -y > /dev/null
+          cp "/tmp/node-extract/node-v${NODE_RUNTIME_VERSION}-win-x64/node.exe" runtime/node.exe
+
+      - name: Assemble distribution
+        shell: bash
+        run: bash scripts/build-windows-dist.sh
+
+      - name: Install NSIS
+        shell: bash
+        run: choco install nsis -y
+
+      - name: Build NSIS installer
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          makensis -DVERSION="$VERSION" installer/windows/installer.nsi
+
+      - name: Create zip archive
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          cd dist
+          7z a "obs-tuya-smart-plug-${VERSION}-windows-x64.zip" obs-tuya-smart-plug/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64
+          path: |
+            dist/*.exe
+            dist/*.zip
+
+  # ==================== Linux ====================
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Bundle sidecar
+        run: pnpm --filter @obs-tuya/sidecar bundle
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Download portable Node.js
+        run: |
+          NODE_URL="https://nodejs.org/dist/v${NODE_RUNTIME_VERSION}/node-v${NODE_RUNTIME_VERSION}-linux-x64.tar.gz"
+          curl -fsSL "$NODE_URL" | tar xz -C /tmp/
+          mkdir -p runtime
+          cp "/tmp/node-v${NODE_RUNTIME_VERSION}-linux-x64/bin/node" runtime/node
+          strip runtime/node
+          chmod +x runtime/node
+
+      - name: Assemble distribution
+        shell: bash
+        run: |
+          DIST_DIR="dist/obs-tuya-smart-plug"
+          SIDECAR_NM="apps/sidecar/node_modules"
+          DIST_NM="$DIST_DIR/apps/sidecar/node_modules"
+          rm -rf "$DIST_DIR"
+          mkdir -p "$DIST_DIR"
+
+          cp "bin/neutralino-linux_x64" "$DIST_DIR/obs-tuya-smart-plug"
+          chmod +x "$DIST_DIR/obs-tuya-smart-plug"
+
+          # Patch config for production
+          node -e "
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync('neutralino.config.json', 'utf8'));
+            delete config.url;
+            config.documentRoot = '/apps/desktop/dist/';
+            config.modes.window.enableInspector = false;
+            fs.writeFileSync('$DIST_DIR/neutralino.config.json', JSON.stringify(config, null, 2));
+          "
+
+          mkdir -p "$DIST_DIR/apps/desktop/dist"
+          cp -r apps/desktop/dist/* "$DIST_DIR/apps/desktop/dist/"
+
+          mkdir -p "$DIST_DIR/apps/sidecar/dist"
+          cp apps/sidecar/dist/bundle.mjs "$DIST_DIR/apps/sidecar/dist/"
+
+          # Native modules
+          if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
+            mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release" "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
+            cp -r "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+            cp "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
+            find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
+          fi
+          if [ -d "$SIDECAR_NM/better-sqlite3" ]; then
+            mkdir -p "$DIST_NM/better-sqlite3/build/Release" "$DIST_NM/better-sqlite3/lib"
+            cp -r "$SIDECAR_NM/better-sqlite3/lib/" "$DIST_NM/better-sqlite3/lib/"
+            cp "$SIDECAR_NM/better-sqlite3/package.json" "$DIST_NM/better-sqlite3/"
+            find "$SIDECAR_NM/better-sqlite3" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3/build/Release/" \;
+          fi
+          if [ -d "$SIDECAR_NM/argon2" ]; then
+            mkdir -p "$DIST_NM/argon2/build/Release"
+            cp "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
+            find "$SIDECAR_NM/argon2" -maxdepth 1 \( -name "*.js" -o -name "*.cjs" -o -name "*.mjs" \) -exec cp {} "$DIST_NM/argon2/" \;
+            find "$SIDECAR_NM/argon2" -name "*.node" -exec cp {} "$DIST_NM/argon2/build/Release/" \;
+            [ -d "$SIDECAR_NM/argon2/node_modules" ] && cp -r "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
+          fi
+          [ -d "$SIDECAR_NM/bindings" ] && cp -r "$SIDECAR_NM/bindings" "$DIST_NM/"
+          [ -d "$SIDECAR_NM/file-uri-to-path" ] && cp -r "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
+
+          # Node.js runtime
+          mkdir -p "$DIST_DIR/runtime"
+          cp runtime/node "$DIST_DIR/runtime/node"
+          chmod +x "$DIST_DIR/runtime/node"
+
+          mkdir -p "$DIST_DIR/resources"
+
+      - name: Create tar.gz
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          cd dist
+          tar -czf "obs-tuya-smart-plug-${VERSION}-linux-x64.tar.gz" obs-tuya-smart-plug/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64
+          path: dist/*.tar.gz
+
+  # ==================== Release ====================
+  release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f | sort
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+          files: |
+            artifacts/**/*.dmg
+            artifacts/**/*.exe
+            artifacts/**/*.tar.gz
+            artifacts/**/*.zip

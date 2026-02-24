@@ -61,11 +61,17 @@ if [ -d "$SIDECAR_NM/argon2" ]; then
   find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp {} "$DIST_NM/argon2/" \;
   cp "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
   find "$SIDECAR_NM/argon2" -name "*.node" -exec cp {} "$DIST_NM/argon2/build/Release/" \;
-  [ -d "$SIDECAR_NM/argon2/node_modules" ] && cp -r "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
+  if [ -d "$SIDECAR_NM/argon2/node_modules" ]; then
+    cp -r "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
+  fi
 fi
 
-[ -d "$SIDECAR_NM/bindings" ] && cp -r "$SIDECAR_NM/bindings" "$DIST_NM/"
-[ -d "$SIDECAR_NM/file-uri-to-path" ] && cp -r "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
+if [ -d "$SIDECAR_NM/bindings" ]; then
+  cp -r "$SIDECAR_NM/bindings" "$DIST_NM/"
+fi
+if [ -d "$SIDECAR_NM/file-uri-to-path" ]; then
+  cp -r "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
+fi
 
 # Node.js runtime
 if [ -f "$ROOT_DIR/runtime/node.exe" ]; then
@@ -81,6 +87,6 @@ mkdir -p "$DIST_DIR/resources"
 
 echo ""
 echo "Windows distribution assembled at: $DIST_DIR"
-du -sh "$DIST_DIR"
+du -sh "$DIST_DIR" 2>/dev/null || echo "(size check skipped)"
 echo ""
 echo "=== Done ==="

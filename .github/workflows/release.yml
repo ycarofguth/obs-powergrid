@@ -21,10 +21,6 @@ jobs:
             arch: arm64
             binary: neutralino-mac_arm64
             node_platform: darwin-arm64
-          - runner: macos-13
-            arch: x64
-            binary: neutralino-mac_x64
-            node_platform: darwin-x64
 
     runs-on: ${{ matrix.runner }}
 

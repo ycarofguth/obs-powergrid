@@ -97,40 +97,38 @@ cp "$ROOT_DIR/apps/sidecar/dist/bundle.mjs" "$APP_BUNDLE/Contents/Resources/apps
 SIDECAR_NM="$ROOT_DIR/apps/sidecar/node_modules"
 DIST_NM="$APP_BUNDLE/Contents/Resources/apps/sidecar/node_modules"
 
-# better-sqlite3-multiple-ciphers
+# better-sqlite3-multiple-ciphers (pnpm override: better-sqlite3 -> better-sqlite3-multiple-ciphers)
+mkdir -p "$DIST_NM"
 if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release"
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
-  cp -r "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
-  cp "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
-  find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
-fi
-
-# better-sqlite3 (alias)
-if [ -d "$SIDECAR_NM/better-sqlite3" ]; then
-  mkdir -p "$DIST_NM/better-sqlite3/build/Release"
-  mkdir -p "$DIST_NM/better-sqlite3/lib"
-  cp -r "$SIDECAR_NM/better-sqlite3/lib/" "$DIST_NM/better-sqlite3/lib/"
-  cp "$SIDECAR_NM/better-sqlite3/package.json" "$DIST_NM/better-sqlite3/"
-  find "$SIDECAR_NM/better-sqlite3" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3/build/Release/" \;
+  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+  cp -L "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
+  find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp -L {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
+  # Create better-sqlite3 alias (bundle.mjs imports 'better-sqlite3')
+  cp -r "$DIST_NM/better-sqlite3-multiple-ciphers" "$DIST_NM/better-sqlite3"
 fi
 
 # argon2
 if [ -d "$SIDECAR_NM/argon2" ]; then
   mkdir -p "$DIST_NM/argon2/build/Release"
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.js" -exec cp {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.cjs" -exec cp {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp {} "$DIST_NM/argon2/" \;
-  cp "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
-  find "$SIDECAR_NM/argon2" -name "*.node" -exec cp {} "$DIST_NM/argon2/build/Release/" \;
+  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.js" -exec cp -L {} "$DIST_NM/argon2/" \;
+  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.cjs" -exec cp -L {} "$DIST_NM/argon2/" \;
+  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp -L {} "$DIST_NM/argon2/" \;
+  cp -L "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
+  find "$SIDECAR_NM/argon2" -name "*.node" -exec cp -L {} "$DIST_NM/argon2/build/Release/" \;
   if [ -d "$SIDECAR_NM/argon2/node_modules" ]; then
-    cp -r "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
+    cp -rL "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
   fi
 fi
 
 # bindings + file-uri-to-path
-[ -d "$SIDECAR_NM/bindings" ] && cp -r "$SIDECAR_NM/bindings" "$DIST_NM/"
-[ -d "$SIDECAR_NM/file-uri-to-path" ] && cp -r "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
+if [ -d "$SIDECAR_NM/bindings" ]; then
+  cp -rL "$SIDECAR_NM/bindings" "$DIST_NM/"
+fi
+if [ -d "$SIDECAR_NM/file-uri-to-path" ]; then
+  cp -rL "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
+fi
 
 # ---- Resources directory (Neutralino requirement) ----
 mkdir -p "$APP_BUNDLE/Contents/Resources/resources"

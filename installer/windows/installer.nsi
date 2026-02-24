@@ -61,30 +61,9 @@ Section "Install"
   ; Resources
   SetOutPath "$INSTDIR\resources"
 
-  ; Launcher script (VBScript - no console window)
+  ; Launcher script (created by build-windows-dist.sh)
   SetOutPath "$INSTDIR"
-  FileOpen $0 "$INSTDIR\start.vbs" w
-  FileWrite $0 'Set WshShell = CreateObject("WScript.Shell")$\r$\n'
-  FileWrite $0 'Set fso = CreateObject("Scripting.FileSystemObject")$\r$\n'
-  FileWrite $0 'appDir = fso.GetParentFolderName(WScript.ScriptFullName)$\r$\n'
-  FileWrite $0 'WshShell.CurrentDirectory = appDir$\r$\n'
-  FileWrite $0 '$\r$\n'
-  FileWrite $0 "' Start sidecar (hidden window)$\r$\n"
-  FileWrite $0 'WshShell.Run """" & appDir & "\runtime\node.exe"" """ & appDir & "\apps\sidecar\dist\bundle.mjs""", 0, False$\r$\n'
-  FileWrite $0 '$\r$\n'
-  FileWrite $0 "' Wait for sidecar to start$\r$\n"
-  FileWrite $0 'WScript.Sleep 3000$\r$\n'
-  FileWrite $0 '$\r$\n'
-  FileWrite $0 "' Start Neutralino (GUI window)$\r$\n"
-  FileWrite $0 'WshShell.Run """" & appDir & "\obs-tuya-smart-plug.exe"" --load-dir-res", 1, True$\r$\n'
-  FileWrite $0 '$\r$\n'
-  FileWrite $0 "' Cleanup: stop sidecar when app exits$\r$\n"
-  FileWrite $0 'Set objWMI = GetObject("winmgmts:\\.\root\cimv2")$\r$\n'
-  FileWrite $0 'Set colProcs = objWMI.ExecQuery("SELECT * FROM Win32_Process WHERE Name=''node.exe'' AND CommandLine LIKE ''%bundle.mjs%''")$\r$\n'
-  FileWrite $0 'For Each objProc In colProcs$\r$\n'
-  FileWrite $0 '    objProc.Terminate()$\r$\n'
-  FileWrite $0 'Next$\r$\n'
-  FileClose $0
+  File "..\..\dist\obs-tuya-smart-plug\start.vbs"
 
   ; Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"

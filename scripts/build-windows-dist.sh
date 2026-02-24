@@ -96,6 +96,30 @@ fi
 # Resources
 mkdir -p "$DIST_DIR/resources"
 
+# Launcher script (VBScript - no console window)
+cat > "$DIST_DIR/start.vbs" << 'VBSEOF'
+Set WshShell = CreateObject("WScript.Shell")
+Set fso = CreateObject("Scripting.FileSystemObject")
+appDir = fso.GetParentFolderName(WScript.ScriptFullName)
+WshShell.CurrentDirectory = appDir
+
+' Start sidecar (hidden window)
+WshShell.Run """" & appDir & "\runtime\node.exe"" """ & appDir & "\apps\sidecar\dist\bundle.mjs""", 0, False
+
+' Wait for sidecar to start
+WScript.Sleep 3000
+
+' Start Neutralino (GUI window)
+WshShell.Run """" & appDir & "\obs-tuya-smart-plug.exe"" --load-dir-res", 1, True
+
+' Cleanup: stop sidecar when app exits
+Set objWMI = GetObject("winmgmts:\\.\root\cimv2")
+Set colProcs = objWMI.ExecQuery("SELECT * FROM Win32_Process WHERE Name='node.exe' AND CommandLine LIKE '%bundle.mjs%'")
+For Each objProc In colProcs
+    objProc.Terminate()
+Next
+VBSEOF
+
 echo ""
 echo "Windows distribution assembled at: $DIST_DIR"
 du -sh "$DIST_DIR" 2>/dev/null || echo "(size check skipped)"

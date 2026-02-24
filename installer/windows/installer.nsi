@@ -17,8 +17,6 @@ VIAddVersionKey "FileDescription" "OBS PowerGrid Installer"
 
 ; ---- UI ----
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\..\apps\desktop\resources\icons\icon-256.png"
-!define MUI_UNICON "..\..\apps\desktop\resources\icons\icon-256.png"
 
 ; ---- Pages ----
 !insertmacro MUI_PAGE_WELCOME
@@ -50,7 +48,7 @@ Section "Install"
 
   ; Frontend
   SetOutPath "$INSTDIR\apps\desktop\dist"
-  File /r "..\..\dist\obs-tuya-smart-plug\apps\desktop\dist\*.*"
+  File /r "..\..\dist\obs-tuya-smart-plug\apps\desktop\dist\*"
 
   ; Sidecar
   SetOutPath "$INSTDIR\apps\sidecar\dist"
@@ -58,7 +56,7 @@ Section "Install"
 
   ; Native modules
   SetOutPath "$INSTDIR\apps\sidecar\node_modules"
-  File /r "..\..\dist\obs-tuya-smart-plug\apps\sidecar\node_modules\*.*"
+  File /nonfatal /r "..\..\dist\obs-tuya-smart-plug\apps\sidecar\node_modules\*"
 
   ; Resources
   SetOutPath "$INSTDIR\resources"

@@ -144,14 +144,12 @@ jobs:
         run: bash scripts/build-windows-dist.sh
 
       - name: Install NSIS
-        shell: bash
         run: choco install nsis -y
 
       - name: Build NSIS installer
-        shell: bash
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          makensis -DVERSION="$VERSION" installer/windows/installer.nsi
+          $version = "${{ github.ref_name }}".TrimStart("v")
+          & "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION="$version" installer\windows\installer.nsi
 
       - name: Create zip archive
         shell: bash

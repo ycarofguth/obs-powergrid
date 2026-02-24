@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Download Neutralino binaries
+        run: npx @neutralinojs/neu update --latest
+
       - name: Build
         run: pnpm build
 
@@ -115,6 +118,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Download Neutralino binaries
+        run: npx @neutralinojs/neu update --latest
+
       - name: Build
         run: pnpm build
 
@@ -180,6 +186,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Download Neutralino binaries
+        run: npx @neutralinojs/neu update --latest
 
       - name: Build
         run: pnpm build

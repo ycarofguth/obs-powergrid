@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const GITHUB_OWNER = 'ycaroguth'
-const GITHUB_REPO = 'obs-tuya-smart-plug'
+const GITHUB_OWNER = 'ycarofguth'
+const GITHUB_REPO = 'obs-powergrid'
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 
 interface GitHubRelease {
@@ -64,7 +64,7 @@ async function fetchLatestRelease(): Promise<GitHubRelease | null> {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        'User-Agent': 'obs-tuya-smart-plug',
+        'User-Agent': 'obs-powergrid',
       },
       signal: AbortSignal.timeout(10000),
     })
@@ -129,7 +129,7 @@ export async function getChangelog(): Promise<
     const response = await fetch(url, {
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        'User-Agent': 'obs-tuya-smart-plug',
+        'User-Agent': 'obs-powergrid',
       },
       signal: AbortSignal.timeout(10000),
     })

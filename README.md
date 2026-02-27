@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/ycaroguth/obs-tuya-smart-plug?label=vers%C3%A3o" alt="Versao">
-  <img src="https://img.shields.io/github/license/ycaroguth/obs-tuya-smart-plug" alt="Licenca">
+  <img src="https://img.shields.io/github/v/release/ycarofguth/obs-powergrid?label=vers%C3%A3o" alt="Versao">
+  <img src="https://img.shields.io/github/license/ycarofguth/obs-powergrid" alt="Licenca">
   <img src="https://img.shields.io/badge/plataforma-Windows%20%7C%20macOS%20%7C%20Linux-blue" alt="Plataforma">
   <img src="https://img.shields.io/badge/node-%3E%3D22-green" alt="Node.js">
 </p>
@@ -62,7 +62,7 @@ Leia a [Politica de Privacidade](docs/privacy-policy.md) completa.
 
 ## Download
 
-Baixe a versao mais recente na pagina de [Releases](https://github.com/ycaroguth/obs-tuya-smart-plug/releases/latest):
+Baixe a versao mais recente na pagina de [Releases](https://github.com/ycarofguth/obs-powergrid/releases/latest):
 
 | Plataforma            | Instalador          | Arquivo Portavel |
 | --------------------- | ------------------- | ---------------- |
@@ -109,8 +109,8 @@ O app guia voce nesse processo durante o setup inicial.
 
 ```bash
 # Clonar o repositorio
-git clone https://github.com/ycaroguth/obs-tuya-smart-plug.git
-cd obs-tuya-smart-plug
+git clone https://github.com/ycarofguth/obs-powergrid.git
+cd obs-powergrid
 
 # Instalar dependencias
 pnpm install

@@ -66,12 +66,12 @@ export function AboutPage() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Licença</span>
-              <span className="text-foreground">MIT</span>
+              <span className="text-foreground">GPL-3.0</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Política de Privacidade</span>
               <a
-                href="https://github.com/ycaroguth/obs-tuya-smart-plug/blob/main/docs/privacy-policy.md"
+                href="https://github.com/ycarofguth/obs-powergrid/blob/main/docs/privacy-policy.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline inline-flex items-center gap-1"
@@ -83,7 +83,7 @@ export function AboutPage() {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Repositório</span>
               <a
-                href="https://github.com/ycaroguth/obs-tuya-smart-plug"
+                href="https://github.com/ycarofguth/obs-powergrid"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline inline-flex items-center gap-1"

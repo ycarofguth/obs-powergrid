@@ -18,8 +18,8 @@ Obrigado pelo interesse em contribuir com o OBS PowerGrid! Este guia explica com
 # 1. Fork o repositorio no GitHub
 
 # 2. Clone seu fork
-git clone https://github.com/SEU_USUARIO/obs-tuya-smart-plug.git
-cd obs-tuya-smart-plug
+git clone https://github.com/SEU_USUARIO/obs-powergrid.git
+cd obs-powergrid
 
 # 3. Instale dependencias
 pnpm install
@@ -99,11 +99,11 @@ docs/            # Documentacao
 
 ## Reportando Bugs
 
-Use o [template de bug report](https://github.com/ycaroguth/obs-tuya-smart-plug/issues/new?template=bug_report.yml) para reportar problemas.
+Use o [template de bug report](https://github.com/ycarofguth/obs-powergrid/issues/new?template=bug_report.yml) para reportar problemas.
 
 ## Sugerindo Funcionalidades
 
-Use o [template de feature request](https://github.com/ycaroguth/obs-tuya-smart-plug/issues/new?template=feature_request.yml) para sugerir melhorias.
+Use o [template de feature request](https://github.com/ycarofguth/obs-powergrid/issues/new?template=feature_request.yml) para sugerir melhorias.
 
 ---
 

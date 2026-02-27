@@ -10,7 +10,7 @@
 
 Se voce encontrou uma vulnerabilidade de seguranca, **NAO abra uma Issue publica.**
 
-Use o [GitHub Security Advisory](https://github.com/ycaroguth/obs-tuya-smart-plug/security/advisories/new) para reportar de forma privada.
+Use o [GitHub Security Advisory](https://github.com/ycarofguth/obs-powergrid/security/advisories/new) para reportar de forma privada.
 
 Responderemos dentro de 72 horas.
 

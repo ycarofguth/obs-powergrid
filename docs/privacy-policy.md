@@ -85,7 +85,7 @@ Este aplicativo é **código aberto** (open source). Você pode:
 - Compilar você mesmo a partir do código-fonte
 - Auditar a segurança
 
-Repositório: [github.com/ycaroguth/obs-tuya-smart-plug](https://github.com/ycaroguth/obs-tuya-smart-plug)
+Repositório: [github.com/ycarofguth/obs-powergrid](https://github.com/ycarofguth/obs-powergrid)
 
 ---
 
@@ -150,7 +150,7 @@ A data de "Última atualização" no topo indica quando a política foi revisada
 
 Para dúvidas, sugestões ou reportar problemas:
 
-- **Issues:** [github.com/ycaroguth/obs-tuya-smart-plug/issues](https://github.com/ycaroguth/obs-tuya-smart-plug/issues)
+- **Issues:** [github.com/ycarofguth/obs-powergrid/issues](https://github.com/ycarofguth/obs-powergrid/issues)
 
 ---
 

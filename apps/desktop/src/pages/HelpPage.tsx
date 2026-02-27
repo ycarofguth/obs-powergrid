@@ -132,7 +132,7 @@ export function HelpPage() {
           </div>
           <div className="space-y-2">
             <a
-              href="https://github.com/ycaroguth/obs-tuya-smart-plug/blob/main/docs/privacy-policy.md"
+              href="https://github.com/ycarofguth/obs-powergrid/blob/main/docs/privacy-policy.md"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-primary hover:underline"
@@ -150,7 +150,7 @@ export function HelpPage() {
               Tuya IoT Platform
             </a>
             <a
-              href="https://github.com/ycaroguth/obs-tuya-smart-plug"
+              href="https://github.com/ycarofguth/obs-powergrid"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-primary hover:underline"
@@ -159,7 +159,7 @@ export function HelpPage() {
               Repositório GitHub (código-fonte)
             </a>
             <a
-              href="https://github.com/ycaroguth/obs-tuya-smart-plug/issues"
+              href="https://github.com/ycarofguth/obs-powergrid/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-primary hover:underline"

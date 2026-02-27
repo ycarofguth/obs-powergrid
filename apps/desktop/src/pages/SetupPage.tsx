@@ -381,7 +381,7 @@ export function SetupPage() {
 
   const handleOpenPrivacyPolicy = async (e: React.MouseEvent) => {
     e.preventDefault()
-    const url = 'https://github.com/ycaroguth/obs-tuya-smart-plug/blob/main/docs/privacy-policy.md'
+    const url = 'https://github.com/ycarofguth/obs-powergrid/blob/main/docs/privacy-policy.md'
     try {
       const { os } = await import('@neutralinojs/lib')
       await os.open(url)

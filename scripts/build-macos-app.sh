@@ -62,7 +62,7 @@ for i in $(seq 1 20); do
 done
 
 # Run Neutralino
-"$RESOURCES/obs-tuya-smart-plug-bin" --path="$RESOURCES/" --load-dir-res
+"$RESOURCES/obs-powergrid-bin" --path="$RESOURCES/" --load-dir-res
 
 # Cleanup: stop sidecar when Neutralino exits
 kill $SIDECAR_PID 2>/dev/null
@@ -71,8 +71,8 @@ LAUNCHER
 chmod +x "$APP_BUNDLE/Contents/MacOS/${APP_NAME}"
 
 # ---- Neutralino binary ----
-cp "$ROOT_DIR/bin/$BINARY" "$APP_BUNDLE/Contents/Resources/obs-tuya-smart-plug-bin"
-chmod +x "$APP_BUNDLE/Contents/Resources/obs-tuya-smart-plug-bin"
+cp "$ROOT_DIR/bin/$BINARY" "$APP_BUNDLE/Contents/Resources/obs-powergrid-bin"
+chmod +x "$APP_BUNDLE/Contents/Resources/obs-powergrid-bin"
 
 # ---- Neutralino config ----
 # Patch config for .app bundle: remove the url field so it uses documentRoot
@@ -200,8 +200,8 @@ else
   echo "create-dmg not found. Install with: brew install create-dmg"
   echo "Creating tar.gz instead..."
   cd "$DIST_DIR"
-  tar -czf "obs-tuya-smart-plug-v${VERSION}-macos-${ARCH}.tar.gz" "${APP_NAME}.app"
-  echo "Archive: $DIST_DIR/obs-tuya-smart-plug-v${VERSION}-macos-${ARCH}.tar.gz"
+  tar -czf "obs-powergrid-v${VERSION}-macos-${ARCH}.tar.gz" "${APP_NAME}.app"
+  echo "Archive: $DIST_DIR/obs-powergrid-v${VERSION}-macos-${ARCH}.tar.gz"
 fi
 
 echo ""

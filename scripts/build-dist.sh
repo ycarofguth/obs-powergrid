@@ -2,7 +2,7 @@
 set -e
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-DIST_DIR="$ROOT_DIR/dist/obs-tuya-smart-plug"
+DIST_DIR="$ROOT_DIR/dist/obs-powergrid"
 VERSION=$(node -e "console.log(require('./package.json').version)")
 
 echo "=== Build OBS Tuya Smart Plug v${VERSION} ==="
@@ -19,15 +19,15 @@ if [ "$OS" = "Darwin" ]; then
     BINARY="neutralino-mac_x64"
     PLATFORM="macos-x64"
   fi
-  TARGET="obs-tuya-smart-plug"
+  TARGET="obs-powergrid"
 elif [ "$OS" = "Linux" ]; then
   BINARY="neutralino-linux_x64"
   PLATFORM="linux-x64"
-  TARGET="obs-tuya-smart-plug"
+  TARGET="obs-powergrid"
 else
   BINARY="neutralino-win_x64.exe"
   PLATFORM="windows-x64"
-  TARGET="obs-tuya-smart-plug.exe"
+  TARGET="obs-powergrid.exe"
 fi
 
 echo "Plataforma: $PLATFORM"
@@ -135,18 +135,18 @@ du -sh "$DIST_DIR/$TARGET"
 echo ""
 
 echo "[6/6] Compactando..."
-ARCHIVE_NAME="obs-tuya-smart-plug-v${VERSION}-${PLATFORM}"
+ARCHIVE_NAME="obs-powergrid-v${VERSION}-${PLATFORM}"
 
 cd "$ROOT_DIR/dist"
 if [ "$OS" = "Darwin" ] || [ "$OS" = "Linux" ]; then
-  tar -czf "${ARCHIVE_NAME}.tar.gz" obs-tuya-smart-plug/
+  tar -czf "${ARCHIVE_NAME}.tar.gz" obs-powergrid/
   echo "Arquivo: dist/${ARCHIVE_NAME}.tar.gz"
   ls -lh "${ARCHIVE_NAME}.tar.gz"
 else
   if command -v 7z &> /dev/null; then
-    7z a "${ARCHIVE_NAME}.zip" obs-tuya-smart-plug/
+    7z a "${ARCHIVE_NAME}.zip" obs-powergrid/
   elif command -v zip &> /dev/null; then
-    zip -r "${ARCHIVE_NAME}.zip" obs-tuya-smart-plug/
+    zip -r "${ARCHIVE_NAME}.zip" obs-powergrid/
   else
     echo "AVISO: zip/7z nao encontrado, pulando compactacao"
   fi
@@ -154,6 +154,6 @@ fi
 
 echo ""
 echo "=== Build concluido! ==="
-echo "Para executar: cd dist/obs-tuya-smart-plug && ./$TARGET --load-dir-res"
+echo "Para executar: cd dist/obs-powergrid && ./$TARGET --load-dir-res"
 echo ""
 echo "Nota: Node.js 22+ deve estar instalado para executar o sidecar."

@@ -13,8 +13,8 @@ else
   NODE_DIR="$ROOT_DIR"
 fi
 
-DIST_DIR="$ROOT_DIR/dist/obs-tuya-smart-plug"
-NODE_DIST_DIR="$NODE_DIR/dist/obs-tuya-smart-plug"
+DIST_DIR="$ROOT_DIR/dist/obs-powergrid"
+NODE_DIST_DIR="$NODE_DIR/dist/obs-powergrid"
 VERSION=$(node -e "console.log(require('$NODE_DIR/package.json').version)")
 
 echo "=== Assembling Windows distribution v${VERSION} ==="
@@ -23,7 +23,7 @@ rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
 
 # Neutralino binary
-cp "$ROOT_DIR/bin/neutralino-win_x64.exe" "$DIST_DIR/obs-tuya-smart-plug.exe"
+cp "$ROOT_DIR/bin/neutralino-win_x64.exe" "$DIST_DIR/obs-powergrid.exe"
 
 # Config
 node -e "
@@ -130,8 +130,8 @@ Do While Not ready And attempts < 30
     End If
 Loop
 
-' Start Neutralino (GUI window)
-WshShell.Run """" & appDir & "\obs-tuya-smart-plug.exe"" --load-dir-res", 1, True
+' Start Neutralino (GUI window) with --path so it finds config and resources
+WshShell.Run """" & appDir & "\obs-powergrid.exe"" --path=""" & appDir & """ --load-dir-res", 1, True
 
 ' Cleanup: stop sidecar when app exits
 Set objWMI = GetObject("winmgmts:\\.\root\cimv2")

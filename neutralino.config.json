@@ -1,5 +1,5 @@
 {
-  "applicationId": "com.obstuya.smartplug",
+  "applicationId": "com.ycaroguth.obs-powergrid",
   "version": "0.1.0",
   "defaultMode": "window",
   "port": 47532,
@@ -32,7 +32,7 @@
     }
   },
   "cli": {
-    "binaryName": "obs-tuya-smart-plug",
+    "binaryName": "obs-powergrid",
     "resourcesPath": "/resources/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/apps/desktop/dist/neutralino.js",

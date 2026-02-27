@@ -37,34 +37,36 @@ Section "Install"
   SetOutPath "$INSTDIR"
 
   ; Neutralino binary
-  File /oname=obs-tuya-smart-plug.exe "..\..\dist\obs-tuya-smart-plug\obs-tuya-smart-plug.exe"
+  File /oname=obs-powergrid.exe "..\..\dist\obs-powergrid\obs-powergrid.exe"
 
   ; Neutralino config
-  File "..\..\dist\obs-tuya-smart-plug\neutralino.config.json"
+  File "..\..\dist\obs-powergrid\neutralino.config.json"
+
+  ; Icon
+  File "..\..\dist\obs-powergrid\icon.ico"
 
   ; Node.js runtime
   SetOutPath "$INSTDIR\runtime"
-  File "..\..\dist\obs-tuya-smart-plug\runtime\node.exe"
+  File "..\..\dist\obs-powergrid\runtime\node.exe"
 
   ; Frontend
   SetOutPath "$INSTDIR\apps\desktop\dist"
-  File /r "..\..\dist\obs-tuya-smart-plug\apps\desktop\dist\*"
+  File /r "..\..\dist\obs-powergrid\apps\desktop\dist\*"
 
   ; Sidecar
   SetOutPath "$INSTDIR\apps\sidecar\dist"
-  File "..\..\dist\obs-tuya-smart-plug\apps\sidecar\dist\bundle.mjs"
+  File "..\..\dist\obs-powergrid\apps\sidecar\dist\bundle.mjs"
 
   ; Native modules
   SetOutPath "$INSTDIR\apps\sidecar\node_modules"
-  File /nonfatal /r "..\..\dist\obs-tuya-smart-plug\apps\sidecar\node_modules\*"
+  File /nonfatal /r "..\..\dist\obs-powergrid\apps\sidecar\node_modules\*"
 
   ; Resources
   SetOutPath "$INSTDIR\resources"
 
-  ; Icon and launcher script (created by build-windows-dist.sh)
+  ; Launcher script (created by build-windows-dist.sh)
   SetOutPath "$INSTDIR"
-  File "..\..\dist\obs-tuya-smart-plug\icon.ico"
-  File "..\..\dist\obs-tuya-smart-plug\start.vbs"
+  File "..\..\dist\obs-powergrid\start.vbs"
 
   ; Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -97,7 +99,7 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\apps"
   RMDir /r "$INSTDIR\runtime"
   RMDir /r "$INSTDIR\resources"
-  Delete "$INSTDIR\obs-tuya-smart-plug.exe"
+  Delete "$INSTDIR\obs-powergrid.exe"
   Delete "$INSTDIR\neutralino.config.json"
   Delete "$INSTDIR\icon.ico"
   Delete "$INSTDIR\start.vbs"

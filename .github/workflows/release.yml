@@ -85,7 +85,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME}"
           cd dist
-          tar -czf "obs-tuya-smart-plug-${VERSION}-macos-${{ matrix.arch }}.tar.gz" "OBS PowerGrid.app"
+          tar -czf "obs-powergrid-${VERSION}-macos-${{ matrix.arch }}.tar.gz" "OBS PowerGrid.app"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -152,7 +152,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME}"
           cd dist
-          7z a "obs-tuya-smart-plug-${VERSION}-windows-x64.zip" obs-tuya-smart-plug/
+          7z a "obs-powergrid-${VERSION}-windows-x64.zip" obs-powergrid/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -205,14 +205,14 @@ jobs:
       - name: Assemble distribution
         shell: bash
         run: |
-          DIST_DIR="dist/obs-tuya-smart-plug"
+          DIST_DIR="dist/obs-powergrid"
           SIDECAR_NM="apps/sidecar/node_modules"
           DIST_NM="$DIST_DIR/apps/sidecar/node_modules"
           rm -rf "$DIST_DIR"
           mkdir -p "$DIST_DIR"
 
-          cp "bin/neutralino-linux_x64" "$DIST_DIR/obs-tuya-smart-plug"
-          chmod +x "$DIST_DIR/obs-tuya-smart-plug"
+          cp "bin/neutralino-linux_x64" "$DIST_DIR/obs-powergrid"
+          chmod +x "$DIST_DIR/obs-powergrid"
 
           # Patch config for production
           node -e "
@@ -267,7 +267,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME}"
           cd dist
-          tar -czf "obs-tuya-smart-plug-${VERSION}-linux-x64.tar.gz" obs-tuya-smart-plug/
+          tar -czf "obs-powergrid-${VERSION}-linux-x64.tar.gz" obs-powergrid/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

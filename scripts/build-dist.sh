@@ -101,8 +101,10 @@ if [ -d "$SIDECAR_NM/file-uri-to-path" ]; then
   cp -r "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
 fi
 
-# prebuild-install (pode ser necessario para localizar builds)
-# Nao necessario em distribuicao - os .node files ja estao copiados
+# Copy .node bindings to where the `bindings` module searches
+SIDECAR_BUILD="$DIST_DIR/apps/sidecar/build/Release"
+mkdir -p "$SIDECAR_BUILD"
+find "$DIST_NM" -name "*.node" -exec cp -L {} "$SIDECAR_BUILD/" \;
 
 # Resources vazio (necessario para Neutralino)
 mkdir -p "$DIST_DIR/resources"

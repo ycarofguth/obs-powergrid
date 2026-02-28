@@ -61,6 +61,10 @@ Section "Install"
   SetOutPath "$INSTDIR\apps\sidecar\node_modules"
   File /nonfatal /r "..\..\dist\obs-powergrid\apps\sidecar\node_modules\*"
 
+  ; Native bindings (.node files where `bindings` module searches)
+  SetOutPath "$INSTDIR\apps\sidecar\build\Release"
+  File /nonfatal "..\..\dist\obs-powergrid\apps\sidecar\build\Release\*.node"
+
   ; Resources
   SetOutPath "$INSTDIR\resources"
 

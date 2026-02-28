@@ -98,6 +98,12 @@ if [ -d "$SIDECAR_NM/file-uri-to-path" ]; then
   cp -rL "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
 fi
 
+# Copy .node bindings to where the `bindings` module searches
+# (relative to bundle.mjs parent dir = apps/sidecar/)
+SIDECAR_BUILD="$DIST_DIR/apps/sidecar/build/Release"
+mkdir -p "$SIDECAR_BUILD"
+find "$DIST_NM" -name "*.node" -exec cp -L {} "$SIDECAR_BUILD/" \;
+
 # Node.js runtime
 if [ -f "$ROOT_DIR/runtime/node.exe" ]; then
   mkdir -p "$DIST_DIR/runtime"

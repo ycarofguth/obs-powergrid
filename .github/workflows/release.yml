@@ -265,6 +265,11 @@ jobs:
             cp -rL "$SIDECAR_NM/file-uri-to-path" "$DIST_NM/"
           fi
 
+          # Copy .node bindings to where the `bindings` module searches
+          SIDECAR_BUILD="$DIST_DIR/apps/sidecar/build/Release"
+          mkdir -p "$SIDECAR_BUILD"
+          find "$DIST_NM" -name "*.node" -exec cp -L {} "$SIDECAR_BUILD/" \;
+
           # Node.js runtime
           mkdir -p "$DIST_DIR/runtime"
           cp runtime/node "$DIST_DIR/runtime/node"

@@ -68,10 +68,9 @@ DIST_NM="$DIST_DIR/apps/sidecar/node_modules"
 # better-sqlite3 (SQLCipher) - modulo nativo
 if [ -d "$SIDECAR_NM/better-sqlite3" ]; then
   mkdir -p "$DIST_NM/better-sqlite3/build/Release"
-  cp "$SIDECAR_NM/better-sqlite3/lib/"*.js "$DIST_NM/better-sqlite3/lib/" 2>/dev/null || true
   mkdir -p "$DIST_NM/better-sqlite3/lib"
   # Copiar os arquivos JS necessarios
-  cp -r "$SIDECAR_NM/better-sqlite3/lib/" "$DIST_NM/better-sqlite3/lib/"
+  cp -rL "$SIDECAR_NM/better-sqlite3/lib/." "$DIST_NM/better-sqlite3/lib/"
   cp "$SIDECAR_NM/better-sqlite3/package.json" "$DIST_NM/better-sqlite3/"
   # Copiar o binding nativo (.node)
   find "$SIDECAR_NM/better-sqlite3" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3/build/Release/" \;
@@ -81,27 +80,15 @@ fi
 if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release"
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
-  cp -r "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/." "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
   cp "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
   find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
 fi
 
-# argon2 - modulo nativo
+# argon2 - modulo nativo (copy entire package, resolving symlinks)
 if [ -d "$SIDECAR_NM/argon2" ]; then
-  mkdir -p "$DIST_NM/argon2/build/Release"
-  mkdir -p "$DIST_NM/argon2/lib"
-  cp "$SIDECAR_NM/argon2/argon2.cjs" "$DIST_NM/argon2/" 2>/dev/null || true
-  cp "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
-  # Copiar todos os JS
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.js" -exec cp {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.cjs" -exec cp {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp {} "$DIST_NM/argon2/" \;
-  # Bindings nativos
-  find "$SIDECAR_NM/argon2" -name "*.node" -exec cp {} "$DIST_NM/argon2/build/Release/" \;
-  # neon (sub-dependencia do argon2)
-  if [ -d "$SIDECAR_NM/argon2/node_modules" ]; then
-    cp -r "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
-  fi
+  cp -rL "$SIDECAR_NM/argon2" "$DIST_NM/argon2"
+  rm -rf "$DIST_NM/argon2/src" "$DIST_NM/argon2/test" "$DIST_NM/argon2/.github" 2>/dev/null || true
 fi
 
 # bindings (helper para localizar .node files - usado por better-sqlite3)

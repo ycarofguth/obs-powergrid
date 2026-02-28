@@ -56,24 +56,38 @@ mkdir -p "$DIST_NM"
 if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release"
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
-  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/." "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
   cp -L "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
   find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp -L {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
   # Create better-sqlite3 alias (pnpm override: better-sqlite3 -> better-sqlite3-multiple-ciphers)
   cp -r "$DIST_NM/better-sqlite3-multiple-ciphers" "$DIST_NM/better-sqlite3"
 fi
 
-# argon2
-if [ -d "$SIDECAR_NM/argon2" ]; then
-  mkdir -p "$DIST_NM/argon2/build/Release"
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.js" -exec cp -L {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.cjs" -exec cp -L {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp -L {} "$DIST_NM/argon2/" \;
-  cp -L "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
-  find "$SIDECAR_NM/argon2" -name "*.node" -exec cp -L {} "$DIST_NM/argon2/build/Release/" \;
-  if [ -d "$SIDECAR_NM/argon2/node_modules" ]; then
-    cp -rL "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
-  fi
+# argon2 + its runtime dependencies (pnpm hoists them in the virtual store)
+ARGON2_VSTORE=$(find "$ROOT_DIR/node_modules/.pnpm" -path "*/argon2@*/node_modules" -maxdepth 3 -type d 2>/dev/null | head -1)
+if [ -n "$ARGON2_VSTORE" ]; then
+  for pkg in "$ARGON2_VSTORE"/*; do
+    pkgname=$(basename "$pkg")
+    case "$pkgname" in
+      cross-env|.bin) continue ;; # not needed at runtime
+    esac
+    if [ -d "$pkg" ]; then
+      cp -rL "$pkg" "$DIST_NM/$pkgname"
+    fi
+  done
+  # Scoped packages (@phc/format)
+  for scope in "$ARGON2_VSTORE"/@*; do
+    if [ -d "$scope" ]; then
+      scopename=$(basename "$scope")
+      mkdir -p "$DIST_NM/$scopename"
+      for pkg in "$scope"/*; do
+        if [ -d "$pkg" ]; then
+          cp -rL "$pkg" "$DIST_NM/$scopename/$(basename "$pkg")"
+        fi
+      done
+    fi
+  done
+  rm -rf "$DIST_NM/argon2/src" "$DIST_NM/argon2/test" "$DIST_NM/argon2/.github" 2>/dev/null || true
 fi
 
 # Helper modules for native bindings
@@ -99,21 +113,74 @@ mkdir -p "$DIST_DIR/resources"
 # Generate icon.ico
 node "$ROOT_DIR/scripts/generate-ico.mjs" "$DIST_DIR/icon.ico"
 
-# Launcher script (VBScript - no console window)
+# Launcher script (VBScript - no console window, with logging)
 cat > "$DIST_DIR/start.vbs" << 'VBSEOF'
 Set WshShell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 appDir = fso.GetParentFolderName(WScript.ScriptFullName)
 WshShell.CurrentDirectory = appDir
 
-' Start sidecar (hidden window)
-WshShell.Run """" & appDir & "\runtime\node.exe"" """ & appDir & "\apps\sidecar\dist\bundle.mjs""", 0, False
+' === Logging setup ===
+Dim logDir, logFile
+logDir = WshShell.ExpandEnvironmentStrings("%USERPROFILE%") & "\.obs-tuya\logs"
+If Not fso.FolderExists(WshShell.ExpandEnvironmentStrings("%USERPROFILE%") & "\.obs-tuya") Then
+    fso.CreateFolder WshShell.ExpandEnvironmentStrings("%USERPROFILE%") & "\.obs-tuya"
+End If
+If Not fso.FolderExists(logDir) Then
+    fso.CreateFolder logDir
+End If
+Set logFile = fso.OpenTextFile(logDir & "\launcher.log", 2, True)
 
-' Wait for sidecar to be ready (health check)
+Sub Log(msg)
+    logFile.WriteLine Now & " | " & msg
+End Sub
+
+Log "=== OBS PowerGrid Launcher ==="
+Log "App dir: " & appDir
+Log "Log dir: " & logDir
+
+' === Verify files exist ===
+Dim nodeExe, bundleMjs, neuExe
+nodeExe = appDir & "\runtime\node.exe"
+bundleMjs = appDir & "\apps\sidecar\dist\bundle.mjs"
+neuExe = appDir & "\obs-powergrid.exe"
+
+If Not fso.FileExists(nodeExe) Then
+    Log "ERROR: node.exe not found at: " & nodeExe
+    logFile.Close
+    MsgBox "node.exe nao encontrado em:" & vbCrLf & nodeExe, vbCritical, "OBS PowerGrid"
+    WScript.Quit 1
+End If
+If Not fso.FileExists(bundleMjs) Then
+    Log "ERROR: bundle.mjs not found at: " & bundleMjs
+    logFile.Close
+    MsgBox "bundle.mjs nao encontrado em:" & vbCrLf & bundleMjs, vbCritical, "OBS PowerGrid"
+    WScript.Quit 1
+End If
+If Not fso.FileExists(neuExe) Then
+    Log "ERROR: obs-powergrid.exe not found at: " & neuExe
+    logFile.Close
+    MsgBox "obs-powergrid.exe nao encontrado em:" & vbCrLf & neuExe, vbCritical, "OBS PowerGrid"
+    WScript.Quit 1
+End If
+Log "All files verified OK"
+
+' === Start sidecar (hidden window, redirect output to log) ===
+Dim sidecarLog
+sidecarLog = logDir & "\sidecar.log"
+Dim sidecarCmd
+sidecarCmd = "cmd /c """"" & nodeExe & """ """ & bundleMjs & """ > """ & sidecarLog & """ 2>&1"""
+Log "Starting sidecar: " & sidecarCmd
+WshShell.Run sidecarCmd, 0, False
+Log "Sidecar process launched"
+
+' === Wait for sidecar to be ready (health check with timeout) ===
 Dim http, ready, attempts
-Set http = CreateObject("MSXML2.XMLHTTP")
+Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+http.setTimeouts 2000, 2000, 2000, 2000  ' resolve, connect, send, receive (ms)
 ready = False
 attempts = 0
+Log "Starting health check (max 30 attempts, 2s timeout each)..."
 Do While Not ready And attempts < 30
     On Error Resume Next
     http.Open "GET", "http://localhost:47531/api/health", False
@@ -121,24 +188,48 @@ Do While Not ready And attempts < 30
     If Err.Number = 0 Then
         If http.Status = 200 Then
             ready = True
+            Log "Health check OK at attempt " & (attempts + 1)
+        Else
+            Log "Health check attempt " & (attempts + 1) & ": HTTP " & http.Status
         End If
+    Else
+        Log "Health check attempt " & (attempts + 1) & ": Error " & Err.Number & " - " & Err.Description
+        Err.Clear
     End If
     On Error GoTo 0
     If Not ready Then
-        WScript.Sleep 500
+        WScript.Sleep 1000
         attempts = attempts + 1
     End If
 Loop
 
-' Start Neutralino (GUI window) with --path so it finds config and resources
-WshShell.Run """" & appDir & "\obs-powergrid.exe"" --path=""" & appDir & """ --load-dir-res", 1, True
+If Not ready Then
+    Log "WARNING: Sidecar not ready after 30 attempts. Launching UI anyway."
+    Log "Check sidecar log at: " & sidecarLog
+End If
 
-' Cleanup: stop sidecar when app exits
+' === Start Neutralino (GUI window) ===
+Dim neuCmd
+neuCmd = """" & neuExe & """ --path=""" & appDir & """ --load-dir-res"
+Log "Starting Neutralino: " & neuCmd
+WshShell.Run neuCmd, 1, True
+Log "Neutralino exited"
+
+' === Cleanup: stop sidecar when app exits ===
+Log "Stopping sidecar..."
+On Error Resume Next
 Set objWMI = GetObject("winmgmts:\\.\root\cimv2")
 Set colProcs = objWMI.ExecQuery("SELECT * FROM Win32_Process WHERE Name='node.exe' AND CommandLine LIKE '%bundle.mjs%'")
+Dim procCount
+procCount = 0
 For Each objProc In colProcs
     objProc.Terminate()
+    procCount = procCount + 1
 Next
+On Error GoTo 0
+Log "Terminated " & procCount & " sidecar process(es)"
+Log "=== Launcher finished ==="
+logFile.Close
 VBSEOF
 
 echo ""

@@ -102,24 +102,37 @@ mkdir -p "$DIST_NM"
 if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release"
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
-  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/" "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/." "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
   cp -L "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
   find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp -L {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
   # Create better-sqlite3 alias (bundle.mjs imports 'better-sqlite3')
   cp -r "$DIST_NM/better-sqlite3-multiple-ciphers" "$DIST_NM/better-sqlite3"
 fi
 
-# argon2
-if [ -d "$SIDECAR_NM/argon2" ]; then
-  mkdir -p "$DIST_NM/argon2/build/Release"
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.js" -exec cp -L {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.cjs" -exec cp -L {} "$DIST_NM/argon2/" \;
-  find "$SIDECAR_NM/argon2" -maxdepth 1 -name "*.mjs" -exec cp -L {} "$DIST_NM/argon2/" \;
-  cp -L "$SIDECAR_NM/argon2/package.json" "$DIST_NM/argon2/"
-  find "$SIDECAR_NM/argon2" -name "*.node" -exec cp -L {} "$DIST_NM/argon2/build/Release/" \;
-  if [ -d "$SIDECAR_NM/argon2/node_modules" ]; then
-    cp -rL "$SIDECAR_NM/argon2/node_modules" "$DIST_NM/argon2/"
-  fi
+# argon2 + its runtime dependencies (pnpm hoists them in the virtual store)
+ARGON2_VSTORE=$(find "$ROOT_DIR/node_modules/.pnpm" -path "*/argon2@*/node_modules" -maxdepth 3 -type d 2>/dev/null | head -1)
+if [ -n "$ARGON2_VSTORE" ]; then
+  for pkg in "$ARGON2_VSTORE"/*; do
+    pkgname=$(basename "$pkg")
+    case "$pkgname" in
+      cross-env|.bin) continue ;;
+    esac
+    if [ -d "$pkg" ]; then
+      cp -rL "$pkg" "$DIST_NM/$pkgname"
+    fi
+  done
+  for scope in "$ARGON2_VSTORE"/@*; do
+    if [ -d "$scope" ]; then
+      scopename=$(basename "$scope")
+      mkdir -p "$DIST_NM/$scopename"
+      for pkg in "$scope"/*; do
+        if [ -d "$pkg" ]; then
+          cp -rL "$pkg" "$DIST_NM/$scopename/$(basename "$pkg")"
+        fi
+      done
+    fi
+  done
+  rm -rf "$DIST_NM/argon2/src" "$DIST_NM/argon2/test" "$DIST_NM/argon2/.github" 2>/dev/null || true
 fi
 
 # bindings + file-uri-to-path

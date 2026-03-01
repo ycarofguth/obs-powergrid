@@ -53,12 +53,35 @@ DIST_NM="$DIST_DIR/apps/sidecar/node_modules"
 mkdir -p "$DIST_NM"
 
 # Copy better-sqlite3-multiple-ciphers (the actual package)
-if [ -d "$SIDECAR_NM/better-sqlite3-multiple-ciphers" ]; then
+# On Windows, pnpm uses junctions that `find` may not traverse, so we also
+# search the pnpm virtual store directly for .node files.
+BSMC_DIR="$SIDECAR_NM/better-sqlite3-multiple-ciphers"
+if [ -d "$BSMC_DIR" ]; then
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release"
   mkdir -p "$DIST_NM/better-sqlite3-multiple-ciphers/lib"
-  cp -rL "$SIDECAR_NM/better-sqlite3-multiple-ciphers/lib/." "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
-  cp -L "$SIDECAR_NM/better-sqlite3-multiple-ciphers/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
-  find "$SIDECAR_NM/better-sqlite3-multiple-ciphers" -name "*.node" -exec cp -L {} "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" \;
+  cp -rL "$BSMC_DIR/lib/." "$DIST_NM/better-sqlite3-multiple-ciphers/lib/"
+  cp -L "$BSMC_DIR/package.json" "$DIST_NM/better-sqlite3-multiple-ciphers/"
+
+  # Try to find .node in the junction first
+  NODE_FILE_FOUND=""
+  if [ -f "$BSMC_DIR/build/Release/better_sqlite3.node" ]; then
+    cp -L "$BSMC_DIR/build/Release/better_sqlite3.node" "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/"
+    NODE_FILE_FOUND="junction"
+  fi
+
+  # Fallback: search the real directory in pnpm virtual store
+  if [ -z "$NODE_FILE_FOUND" ]; then
+    BSMC_REAL=$(find "$ROOT_DIR/node_modules/.pnpm" -path "*/better-sqlite3-multiple-ciphers@*/node_modules/better-sqlite3-multiple-ciphers/build/Release/better_sqlite3.node" -maxdepth 7 2>/dev/null | head -1)
+    if [ -n "$BSMC_REAL" ]; then
+      cp -L "$BSMC_REAL" "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/"
+      NODE_FILE_FOUND="pnpm-store"
+    fi
+  fi
+
+  echo "better-sqlite3 .node source: ${NODE_FILE_FOUND:-NOT FOUND}"
+  echo "Contents of build/Release:"
+  ls -la "$DIST_NM/better-sqlite3-multiple-ciphers/build/Release/" 2>/dev/null || echo "  (empty)"
+
   # Create better-sqlite3 alias (pnpm override: better-sqlite3 -> better-sqlite3-multiple-ciphers)
   cp -r "$DIST_NM/better-sqlite3-multiple-ciphers" "$DIST_NM/better-sqlite3"
 fi
@@ -103,6 +126,10 @@ fi
 SIDECAR_BUILD="$DIST_DIR/apps/sidecar/build/Release"
 mkdir -p "$SIDECAR_BUILD"
 find "$DIST_NM" -name "*.node" -exec cp -L {} "$SIDECAR_BUILD/" \;
+
+echo "=== .node files in distribution ==="
+find "$DIST_DIR" -name "*.node" 2>/dev/null || echo "(none found)"
+echo "=== End .node files ==="
 
 # Node.js runtime
 if [ -f "$ROOT_DIR/runtime/node.exe" ]; then
